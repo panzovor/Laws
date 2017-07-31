@@ -6,7 +6,7 @@ def read_txt(filepath,encoding= "utf-8"):
         content = file.read()
     return content
 
-def save_txt(filepath,content, encoding= "utf-8",split ="\t"):
+def save_txt(filepath,content, encoding= "utf-8",split =","):
     with open(filepath,mode="w",encoding=encoding) as file:
         if isinstance(content,str):
             file.write(content)
