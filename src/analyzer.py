@@ -6,7 +6,7 @@ def distribution(data_path,label_path,save_path):
     content = tools.read_txt(data_path)
     labels = preprocess.load_labels(label_path)
     label_no_line,no_label_line,label_line =  preprocess.__label_content(content,labels)
-    save_content =[]
+    save_content =[["label","num"]]
     for label in label_line.keys():
         save_content.append([label[1:-4],str(len(label_line[label]))])
 

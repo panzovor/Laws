@@ -54,8 +54,8 @@ def label_content(data_filepth ="../res/data/已完成标注（6818）.txt",labe
 
 
 
-def save_label_no_line_result(lnl_res,save_path = "../res/labeled_data/lnline.txt"):
-    content = []
+def save_label_no_line_result(lnl_res,save_path = "../res/labeled_data/lnline.csv"):
+    content = [["label","article_no","line"]]
     for l in lnl_res.keys():
         for n in lnl_res[l].keys():
             for line in lnl_res[l][n]:
@@ -67,8 +67,8 @@ def save_label_no_line_result(lnl_res,save_path = "../res/labeled_data/lnline.tx
                 content.append([tl,tn,line])
     tools.save_txt(save_path,content)
 
-def save_no_label_line_result(nll_res,save_path = "../res/labeled_data/nlline_data.txt"):
-    content =[]
+def save_no_label_line_result(nll_res,save_path = "../res/labeled_data/nlline_data.csv"):
+    content =[["article_no,label","line"]]
     for n in nll_res.keys():
         for l in nll_res[n].keys():
             for line in nll_res[n][l]:
@@ -80,8 +80,8 @@ def save_no_label_line_result(nll_res,save_path = "../res/labeled_data/nlline_da
                 content.append([tn,tl,line])
     tools.save_txt(save_path,content)
 
-def save_label_data(ll_res,save_path = "../res/labeled_data/label_data.txt"):
-    content = []
+def save_label_data(ll_res,save_path = "../res/labeled_data/label_data.csv"):
+    content = [["label","line"]]
     for l in ll_res:
         for line in ll_res[l]:
             tl = l
