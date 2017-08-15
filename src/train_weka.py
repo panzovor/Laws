@@ -2,6 +2,7 @@ __author__ = 'E440'
 import os
 import src.tools as tools
 import subprocess
+import re
 from nltk.internals import java,config_java
 config_java()
 project_dir = os.path.abspath("../").replace("\\","/")
@@ -79,8 +80,38 @@ def train(model_name,train_file, save_file):
         print("wrong model name")
 
 def analyze(weka_result):
-    pass
+    report_start = "TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class"
+    report_end = "Weighted Avg"
+    head = "                 "
+    # report_indexs =[2,3,4,6]
+    split_regex =" +"
+    start = 0
+    end =0
+    if report_start in weka_result:
+        start = weka_result.rindex(report_start)+len(report_start)
+    if report_end in weka_result:
+        end = weka_result.rindex(report_end)
+    report = weka_result[start:end].replace(head,"")
+    reports = report.split("\n")
+    report = []
+    for line in reports:
+        line = re.split(split_regex,line)
+        report.append(line[-1],line[2],line[3],line[4])
 
+    matrix_start = 0
+    matrix_end = len(weka_result)
+    matrix_regex = "<-- classified as"
+    if matrix_regex in weka_result:
+        matrix_start = weka_result.rindex(matrix_regex)+len(matrix_regex)
+    matrix_string = weka_result[matrix_start:matrix_end].strip().replace("|","")
+    matrix_strings = matrix_string.split("\n")
+    matrix = []
+    for line in matrix_strings:
+        line = re.split(" +",line.strip())
+        matrix.append([line[-1]]+list(map(int,line[:-1])))
+    return report,matrix
+
+def replace_name()
 
 def train_model(train_file,save_root):
     models_names = ['MultilayerPerceptron', 'RBF', 'NaiveBayes', 'RandomForest', 'SMO', 'BayesNet']
