@@ -64,7 +64,7 @@ def analyze_result(report):
 
 if __name__ == "__main__":
 
-    ## train model
+    # train model
     # file = "../res/data/已完成标注（6818）.txt"
     # labelfile = "../res/data/label.txt"
     #
@@ -72,18 +72,20 @@ if __name__ == "__main__":
     # print("data prepare done")
     #
     # print("start training model")
-    model_file = "../res/data/model"
+    # model_file = "../res/data/model"
     # train_model(labelfile,model_file)
     # print("model train done")
 
     ## test model
+    model_file = "../res/data/model"
     file = "../res/data/已完成标注（6818）.txt"
     test_files = "../res/data/test.csv"
-    prepare_data(file, test_files)
+    # prepare_data(file, test_files)
     print("data prepare done")
     print("start testing model")
-    predict(model_file,test_files)
+    # predict(model_file,test_files)
     report,confuse = test_model(model_file,test_files)
     print("test done")
 
     analyze_result(report)
+    print(confuse)

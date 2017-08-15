@@ -27,6 +27,7 @@ def content_filter(content):
         content = content.replace("，【","，】【")
     if "；【" in content:
         content = content.replace("；【","；】【")
+    content = get_sucheng(content)
     fake_label_regex = "\[.{2,7}\]"
     fayuan_regex = ".{2,5}省.{1,20}法院\n"
     zihao_regex = ".{3,10}字第.{1,6}号\n"
@@ -34,12 +35,6 @@ def content_filter(content):
     content = re.sub(fake_label_regex, "", content)
     content = re.sub(fayuan_regex,"",content)
     content = re.sub(zihao_regex,"",content)
-
-    # if "审判长" in content:
-    #     content = content[:content.rindex("审判长")]
-    # if "审判员" in content:
-    #     content = content[:content.rindex("审判员")]
-    # print(content)
     content = content.replace("\n","")
     # for i in range(len(sentence_)):
     #     sen_ = sentence_[i]
@@ -47,7 +42,7 @@ def content_filter(content):
     #         content = content.replace(sen_, replace_[i])
     return content
 
-def get_assey(content):
+def get_assey(content,filter = True):
     instrument_regex = "【--\d{1,6}--】"
     asseys = [var.strip() for var in re.split(instrument_regex,content) if len(var.strip())>0]
     asseys_no = re.findall(instrument_regex,content)
@@ -56,7 +51,10 @@ def get_assey(content):
         no = asseys_no[i][len("【--"):-len("--】")]
         # print(no,asseys_no[i])
         if no not in result.keys():
-            result[no] = content_filter(asseys[i])
+            if filter:
+                result[no] = content_filter(asseys[i])
+            else:
+                result[no] = asseys[i]
     return result
 
 def __label_content(content):
@@ -326,10 +324,26 @@ def label_process(filepath = "../res/data/已完成标注（6818）.txt",save_fi
     save_label_data(label_data,save_file)
 
 
+def get_sucheng(content):
+    sucheng_regex = "\[.{0,2}原告诉称.{0,2}\]"
+    common_regex = "\[.{2,8}\]"
+    sucheng_index = tools.get_regex_str_index(sucheng_regex,content)
+    start = 0
+    if  len(sucheng_index)>0:
+        start = sucheng_index[0]+content[sucheng_index[0]:].index("]")+1
+    end_index = tools.get_regex_str_index(common_regex,content[start:])
+    if len(end_index) >0:
+        end = start+end_index[0]
+    else:
+        end = len(content)
+    content = content[start:end]
+    return content
+
 if __name__ =="__main__":
     label_process()
-    test_seperate_label()
+    # test_seperate_label()
     # test_seperate_id()
+
 
     # train_file =  "../res/seperated_data/train_label.csv"
     # test_file =  "../res/seperated_data/test_label.csv"

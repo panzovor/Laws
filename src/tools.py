@@ -3,7 +3,12 @@ import jieba
 import jieba.posseg as pog
 encoding ="utf-8"
 
-
+def get_regex_str_index(regex,content):
+    iter = re.finditer(regex,content)
+    res =[]
+    for it in iter:
+        res.append(it.start())
+    return res
 
 def read_txt(filepath,encoding= "utf-8"):
     with open(filepath,mode="r",encoding=encoding) as file:
